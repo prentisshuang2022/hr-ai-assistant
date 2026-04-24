@@ -54,6 +54,45 @@ export default function Performance() {
   const [comment, setComment] = useState("");
   const [activeTask, setActiveTask] = useState(myTasks[0]);
   const [tab, setTab] = useState("leader");
+  const [taskQuery, setTaskQuery] = useState("");
+  const [taskFilter, setTaskFilter] = useState<"all" | TaskBucket>("all");
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+
+  const counts = {
+    all: myTasks.length,
+    overdue: myTasks.filter((t) => t.bucket === "overdue").length,
+    today: myTasks.filter((t) => t.bucket === "today").length,
+    soon: myTasks.filter((t) => t.bucket === "soon").length,
+    later: myTasks.filter((t) => t.bucket === "later").length,
+  };
+
+  const filteredTasks = myTasks.filter((t) => {
+    if (taskFilter !== "all" && t.bucket !== taskFilter) return false;
+    if (taskQuery.trim() && !t.name.toLowerCase().includes(taskQuery.trim().toLowerCase())) return false;
+    return true;
+  });
+
+  const allVisibleSelected = filteredTasks.length > 0 && filteredTasks.every((t) => selected.has(t.id));
+  const toggleOne = (id: number) => {
+    setSelected((s) => {
+      const n = new Set(s);
+      n.has(id) ? n.delete(id) : n.add(id);
+      return n;
+    });
+  };
+  const toggleAllVisible = () => {
+    setSelected((s) => {
+      const n = new Set(s);
+      if (allVisibleSelected) filteredTasks.forEach((t) => n.delete(t.id));
+      else filteredTasks.forEach((t) => n.add(t.id));
+      return n;
+    });
+  };
+  const bulkRemind = () => {
+    if (!selected.size) return toast.error("请先勾选待办");
+    toast.success(`已对 ${selected.size} 项待办批量催办`);
+    setSelected(new Set());
+  };
 
   const goScore = (t: typeof myTasks[number]) => {
     setActiveTask(t);
