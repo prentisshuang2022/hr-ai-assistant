@@ -71,7 +71,7 @@ const modules = [
     title: "人资知识库",
     description: "沉淀政策、流程、FAQ 文档，提供全文检索与智能问答。",
     icon: BookOpen,
-    to: "/knowledge",
+    to: "/knowledge/upload",
     stats: [
       { label: "已收录文档", value: "6" },
       { label: "高频问答", value: "6" },
