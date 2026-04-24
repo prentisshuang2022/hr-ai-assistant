@@ -1,4 +1,5 @@
-import { Users, Clock, UserPlus, TrendingUp, GraduationCap, Sparkles } from "lucide-react";
+import { Users, Clock, UserPlus, TrendingUp, GraduationCap } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { useLocation } from "react-router-dom";
 import { NavLink } from "@/components/NavLink";
 import {
@@ -85,9 +86,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border">
         <div className="flex items-center gap-3 px-2 py-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Sparkles className="h-5 w-5" />
-          </div>
+          <img src={logo} alt="人事AI员工 Logo" className="h-9 w-9 shrink-0 rounded-lg object-contain" />
           {!collapsed && (
             <div className="flex flex-col">
               <span className="text-sm font-semibold text-sidebar-foreground">人事AI员工</span>
@@ -98,7 +97,6 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>一级目录</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
