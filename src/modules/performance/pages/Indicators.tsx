@@ -38,6 +38,9 @@ export default function Indicators() {
   const [aiOpen, setAiOpen] = useState(false);
   const [aiPos, setAiPos] = useState("");
   const [aiResult, setAiResult] = useState<{ name: string; rule: string }[]>([]);
+  const [addOpen, setAddOpen] = useState(false);
+  const emptyForm = { name: "", position: "", type: "量化" as "量化" | "定性", weight: 20, rule: "" };
+  const [form, setForm] = useState(emptyForm);
 
   const filtered = list.filter((i) => i.name.includes(q) || i.position.includes(q));
 
