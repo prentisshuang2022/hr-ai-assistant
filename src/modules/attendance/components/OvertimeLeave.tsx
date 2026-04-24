@@ -160,32 +160,73 @@ export default function OvertimeLeave() {
           </div>
         </>
       ) : (
-        <div className="rounded-xl border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent">
-                <TableHead className="pl-6">姓名</TableHead>
-                <TableHead>部门</TableHead>
-                <TableHead>累计可调休(h)</TableHead>
-                <TableHead>已使用(h)</TableHead>
-                <TableHead>剩余余额(h)</TableHead>
-                <TableHead>最近使用日期</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {dayoffRows.map((r) => (
-                <TableRow key={r.id}>
-                  <TableCell className="pl-6 font-medium text-sm">{r.name}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{r.dept}</TableCell>
-                  <TableCell className="text-sm">{r.totalHours}</TableCell>
-                  <TableCell className="text-sm">{r.usedHours}</TableCell>
-                  <TableCell className="text-sm font-medium">{r.remainHours}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{r.lastUsedDate}</TableCell>
+        <>
+          {/* 筛选 */}
+          <div className="flex flex-wrap gap-2">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={doSearch}
+                onChange={(e) => setDoSearch(e.target.value)}
+                placeholder="搜索姓名"
+                className="h-8 w-40 pl-7 text-xs"
+              />
+            </div>
+            <Select value={doDeptFilter} onValueChange={setDoDeptFilter}>
+              <SelectTrigger className="h-8 w-32 text-xs"><SelectValue placeholder="全部部门" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">全部部门</SelectItem>
+                {dayoffDepts.map((d) => (
+                  <SelectItem key={d} value={d}>{d}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={doBalanceFilter} onValueChange={setDoBalanceFilter}>
+              <SelectTrigger className="h-8 w-36 text-xs"><SelectValue placeholder="全部余额" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">全部余额</SelectItem>
+                <SelectItem value="has">有余额(&gt;0h)</SelectItem>
+                <SelectItem value="low">余额偏低(&lt;8h)</SelectItem>
+                <SelectItem value="none">无余额</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="rounded-xl border bg-card">
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="pl-6">姓名</TableHead>
+                  <TableHead>部门</TableHead>
+                  <TableHead>累计可调休(h)</TableHead>
+                  <TableHead>已使用(h)</TableHead>
+                  <TableHead>剩余余额(h)</TableHead>
+                  <TableHead>最近使用日期</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {filteredDayoff.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="py-8 text-center text-sm text-muted-foreground">
+                      暂无符合条件的数据
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredDayoff.map((r) => (
+                    <TableRow key={r.id}>
+                      <TableCell className="pl-6 font-medium text-sm">{r.name}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{r.dept}</TableCell>
+                      <TableCell className="text-sm">{r.totalHours}</TableCell>
+                      <TableCell className="text-sm">{r.usedHours}</TableCell>
+                      <TableCell className="text-sm font-medium">{r.remainHours}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{r.lastUsedDate}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </>
       )}
     </div>
 
