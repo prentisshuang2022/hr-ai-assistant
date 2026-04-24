@@ -37,6 +37,19 @@ const indicators = [
 export default function Performance() {
   const [scores, setScores] = useState<Record<number, number>>({});
   const [comment, setComment] = useState("");
+  const [activeTask, setActiveTask] = useState(myTasks[0]);
+  const [tab, setTab] = useState("leader");
+
+  const goScore = (t: typeof myTasks[number]) => {
+    setActiveTask(t);
+    setTab("leader");
+    setScores({});
+    setComment("");
+    toast.success(`已切换到 ${t.name} 的评分面板`);
+    setTimeout(() => {
+      document.getElementById("score-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
 
   const setScore = (idx: number, v: number) => {
     if (v < 0 || v > 100) {
@@ -116,7 +129,10 @@ export default function Performance() {
           </div>
           <div className="divide-y">
             {myTasks.map((t) => (
-              <div key={t.id} className="p-4 hover:bg-secondary/40 transition-colors">
+              <div
+                key={t.id}
+                className={`p-4 transition-colors ${activeTask.id === t.id ? "bg-primary-soft/40" : "hover:bg-secondary/40"}`}
+              >
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <div className="font-medium text-sm">{t.name}</div>
@@ -132,7 +148,7 @@ export default function Performance() {
                         催办
                       </Button>
                     )}
-                    <Button size="sm" variant="ghost" className="h-7 px-2 text-xs gap-1">
+                    <Button size="sm" variant="ghost" className="h-7 px-2 text-xs gap-1 text-primary hover:text-primary" onClick={() => goScore(t)}>
                       去评分 <ArrowRight className="size-3" />
                     </Button>
                   </div>
@@ -143,13 +159,13 @@ export default function Performance() {
         </Card>
 
         {/* 评分面板 */}
-        <Card className="col-span-2 shadow-none border">
-          <Tabs defaultValue="leader">
+        <Card id="score-panel" className="col-span-2 shadow-none border">
+          <Tabs value={tab} onValueChange={setTab}>
             <div className="px-6 pt-5 border-b">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <div className="text-base font-semibold">林峰 · 市场专员</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">EMP0000 · 入职 2019-08-22</div>
+                  <div className="text-base font-semibold">{activeTask.name}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">当前节点：{activeTask.node} · {activeTask.due}</div>
                 </div>
                 <div className="text-right">
                   <div className="text-xs text-muted-foreground">当前合计得分</div>
