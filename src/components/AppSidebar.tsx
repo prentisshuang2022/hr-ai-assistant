@@ -80,10 +80,9 @@ const items: NavItem[] = [
   },
   {
     title: "人资知识库",
-    url: "/knowledge",
+    url: "/knowledge/upload",
     icon: BookOpen,
     children: [
-      { title: "知识库总览", url: "/knowledge" },
       { title: "文档录入", url: "/knowledge/upload" },
       { title: "全文检索", url: "/knowledge/search" },
       { title: "智能问答", url: "/knowledge/qa" },
