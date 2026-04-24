@@ -2,9 +2,10 @@
  * Tab 3: 加班调休
  * [BACKEND] 数据由后端 API 提供
  */
-import { useState } from "react";
-import { Download, Upload } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Download, Upload, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import UploadAttendanceModal from "./UploadAttendanceModal";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -23,6 +24,11 @@ export default function OvertimeLeave() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
 
+  // 调休明细筛选
+  const [doDeptFilter, setDoDeptFilter] = useState("all");
+  const [doBalanceFilter, setDoBalanceFilter] = useState("all");
+  const [doSearch, setDoSearch] = useState("");
+
   const handleRowClick = (id: string) => {
     setSelectedDetail(id);
     setDetailOpen(true);
@@ -32,6 +38,20 @@ export default function OvertimeLeave() {
     if (campusFilter !== "all" && r.group !== campusFilter) return false;
     if (posFilter === "production" && !["生产岗", "质检岗"].includes(r.position)) return false;
     if (posFilter === "non-production" && ["生产岗", "质检岗"].includes(r.position)) return false;
+    return true;
+  });
+
+  const dayoffDepts = useMemo(
+    () => Array.from(new Set(dayoffRows.map((r) => r.dept))),
+    [],
+  );
+
+  const filteredDayoff = dayoffRows.filter((r) => {
+    if (doDeptFilter !== "all" && r.dept !== doDeptFilter) return false;
+    if (doBalanceFilter === "has" && r.remainHours <= 0) return false;
+    if (doBalanceFilter === "none" && r.remainHours > 0) return false;
+    if (doBalanceFilter === "low" && !(r.remainHours > 0 && r.remainHours < 8)) return false;
+    if (doSearch.trim() && !r.name.toLowerCase().includes(doSearch.trim().toLowerCase())) return false;
     return true;
   });
 
@@ -140,32 +160,73 @@ export default function OvertimeLeave() {
           </div>
         </>
       ) : (
-        <div className="rounded-xl border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent">
-                <TableHead className="pl-6">姓名</TableHead>
-                <TableHead>部门</TableHead>
-                <TableHead>累计可调休(h)</TableHead>
-                <TableHead>已使用(h)</TableHead>
-                <TableHead>剩余余额(h)</TableHead>
-                <TableHead>最近使用日期</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {dayoffRows.map((r) => (
-                <TableRow key={r.id}>
-                  <TableCell className="pl-6 font-medium text-sm">{r.name}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{r.dept}</TableCell>
-                  <TableCell className="text-sm">{r.totalHours}</TableCell>
-                  <TableCell className="text-sm">{r.usedHours}</TableCell>
-                  <TableCell className="text-sm font-medium">{r.remainHours}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{r.lastUsedDate}</TableCell>
+        <>
+          {/* 筛选 */}
+          <div className="flex flex-wrap gap-2">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={doSearch}
+                onChange={(e) => setDoSearch(e.target.value)}
+                placeholder="搜索姓名"
+                className="h-8 w-40 pl-7 text-xs"
+              />
+            </div>
+            <Select value={doDeptFilter} onValueChange={setDoDeptFilter}>
+              <SelectTrigger className="h-8 w-32 text-xs"><SelectValue placeholder="全部部门" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">全部部门</SelectItem>
+                {dayoffDepts.map((d) => (
+                  <SelectItem key={d} value={d}>{d}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={doBalanceFilter} onValueChange={setDoBalanceFilter}>
+              <SelectTrigger className="h-8 w-36 text-xs"><SelectValue placeholder="全部余额" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">全部余额</SelectItem>
+                <SelectItem value="has">有余额(&gt;0h)</SelectItem>
+                <SelectItem value="low">余额偏低(&lt;8h)</SelectItem>
+                <SelectItem value="none">无余额</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="rounded-xl border bg-card">
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="pl-6">姓名</TableHead>
+                  <TableHead>部门</TableHead>
+                  <TableHead>累计可调休(h)</TableHead>
+                  <TableHead>已使用(h)</TableHead>
+                  <TableHead>剩余余额(h)</TableHead>
+                  <TableHead>最近使用日期</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {filteredDayoff.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="py-8 text-center text-sm text-muted-foreground">
+                      暂无符合条件的数据
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredDayoff.map((r) => (
+                    <TableRow key={r.id}>
+                      <TableCell className="pl-6 font-medium text-sm">{r.name}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{r.dept}</TableCell>
+                      <TableCell className="text-sm">{r.totalHours}</TableCell>
+                      <TableCell className="text-sm">{r.usedHours}</TableCell>
+                      <TableCell className="text-sm font-medium">{r.remainHours}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{r.lastUsedDate}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </>
       )}
     </div>
 
