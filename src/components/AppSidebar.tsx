@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Users, Clock, UserPlus, TrendingUp, GraduationCap, ChevronRight, type LucideIcon } from "lucide-react";
+import { Users, Clock, UserPlus, TrendingUp, GraduationCap, BookOpen, ChevronRight, type LucideIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { NavLink } from "@/components/NavLink";
@@ -76,6 +76,17 @@ const items: NavItem[] = [
       { title: "考试中心", url: "/training/exam-center" },
       { title: "在岗培训", url: "/training/on-job" },
       { title: "培训记录", url: "/training/records" },
+    ],
+  },
+  {
+    title: "人资知识库",
+    url: "/knowledge",
+    icon: BookOpen,
+    children: [
+      { title: "知识库总览", url: "/knowledge" },
+      { title: "文档录入", url: "/knowledge/upload" },
+      { title: "全文检索", url: "/knowledge/search" },
+      { title: "智能问答", url: "/knowledge/qa" },
     ],
   },
 ];
