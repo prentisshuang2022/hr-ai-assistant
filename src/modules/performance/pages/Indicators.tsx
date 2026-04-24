@@ -80,6 +80,27 @@ export default function Indicators() {
     toast.success(`已采纳 ${added.length} 项指标到指标库`);
   };
 
+  const submitAdd = () => {
+    if (!form.name.trim() || !form.position.trim()) {
+      toast.error("请填写指标名称与适用岗位");
+      return;
+    }
+    const item: Indicator = {
+      id: `M${Date.now()}`,
+      name: form.name.trim(),
+      position: form.position.trim(),
+      type: form.type,
+      weight: Number(form.weight) || 0,
+      rule: form.rule.trim() || "—",
+      status: "启用",
+      source: "自建",
+    };
+    setList((l) => [item, ...l]);
+    setAddOpen(false);
+    setForm(emptyForm);
+    toast.success("指标已新增到指标库");
+  };
+
   return (
     <div className="p-8 max-w-[1400px] mx-auto">
       <PageHeader
@@ -90,7 +111,7 @@ export default function Indicators() {
             <Button variant="outline" className="gap-2" onClick={() => setAiOpen(true)}>
               <Sparkles className="size-4 text-primary" />AI 辅助生成
             </Button>
-            <Button className="gap-2"><Plus className="size-4" />新增指标</Button>
+            <Button className="gap-2" onClick={() => setAddOpen(true)}><Plus className="size-4" />新增指标</Button>
           </>
         }
       />
