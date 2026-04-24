@@ -143,7 +143,7 @@ export default function Dashboard() {
       <SectionCard
         title="近期考试"
         subtitle="最近 30 天发布的离岗培训考试"
-        actions={<Button variant="ghost" size="sm" className="text-primary">前往考试中心 <ArrowRight className="size-3.5 ml-1" /></Button>}
+        actions={<Button asChild variant="ghost" size="sm" className="text-primary"><a href="/training/exam-center">前往考试中心 <ArrowRight className="size-3.5 ml-1" /></a></Button>}
       >
         <div className="overflow-hidden rounded-xl border border-border">
           <table className="w-full text-sm">

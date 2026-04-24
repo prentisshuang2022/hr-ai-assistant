@@ -33,7 +33,7 @@ const CandidateList = () => {
   }, {} as Record<string, number>);
 
   return (
-    <AppShell breadcrumbs={[{ label: "招聘管理" }, { label: "岗位与 JD", to: "/recruit/jobs" }, { label: job.title }]}>
+    <AppShell breadcrumbs={[{ label: "招聘管理" }, { label: "岗位与 JD", to: "/recruitment/jobs" }, { label: job.title }]}>
       {/* Job header */}
       <div className="bg-card rounded-2xl border border-border shadow-[var(--shadow-card)] p-6 mb-6">
         <div className="flex items-start justify-between gap-6 flex-wrap">

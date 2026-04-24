@@ -55,8 +55,8 @@ const CandidateDetail = () => {
     <AppShell
       breadcrumbs={[
         { label: "招聘管理" },
-        { label: "岗位与 JD", to: "/recruit/jobs" },
-        { label: job.title, to: `/recruit/jobs/${job.id}/candidates` },
+        { label: "岗位与 JD", to: "/recruitment/jobs" },
+        { label: job.title, to: `/recruitment/jobs/${job.id}/candidates` },
         { label: candidate.name },
       ]}
     >

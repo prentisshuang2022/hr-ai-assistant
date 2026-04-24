@@ -70,11 +70,11 @@ const JobNew = () => {
   const save = () => {
     if (!jd) return toast.error("请先生成 JD");
     toast.success("岗位与 JD 已保存");
-    setTimeout(() => navigate("/recruit/jobs"), 600);
+    setTimeout(() => navigate("/recruitment/jobs"), 600);
   };
 
   return (
-    <AppShell breadcrumbs={[{ label: "招聘管理" }, { label: "岗位与 JD", to: "/recruit/jobs" }, { label: "新建岗位" }]}>
+    <AppShell breadcrumbs={[{ label: "招聘管理" }, { label: "岗位与 JD", to: "/recruitment/jobs" }, { label: "新建岗位" }]}>
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-foreground">新建岗位 · AI 生成 JD</h1>
         <p className="text-sm text-muted-foreground mt-2">填写部门与岗位信息，AI 将自动产出标准化 JD，可二次编辑后保存</p>

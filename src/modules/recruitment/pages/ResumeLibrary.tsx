@@ -108,7 +108,7 @@ const ResumeLibrary = () => {
               <p className="text-xs text-muted-foreground mt-0.5">{jobCandidates.length} 份已解析简历</p>
             </div>
             <Button variant="outline" size="sm" asChild>
-              <Link to={`/recruit/jobs/${selectedJob}/candidates`}>查看候选人列表</Link>
+              <Link to={`/recruitment/jobs/${selectedJob}/candidates`}>查看候选人列表</Link>
             </Button>
           </div>
           <div className="divide-y divide-border max-h-[600px] overflow-auto">

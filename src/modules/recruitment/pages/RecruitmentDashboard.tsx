@@ -121,9 +121,9 @@ const RecruitDashboard = () => {
             <h2 className="text-lg font-semibold mb-4">快捷入口</h2>
             <div className="space-y-3">
               {[
-                { icon: FileText, label: "AI 生成 JD", desc: "一句话生成专业职位描述", to: "/recruit/jobs/new", tone: "primary" },
-                { icon: Upload, label: "上传简历", desc: "批量解析并入库", to: "/recruit/resumes", tone: "info" },
-                { icon: Users, label: "候选人台账", desc: "全量候选人状态管理", to: "/recruit/candidates", tone: "success" },
+                { icon: FileText, label: "AI 生成 JD", desc: "一句话生成专业职位描述", to: "/recruitment/jobs/new", tone: "primary" },
+                { icon: Upload, label: "上传简历", desc: "批量解析并入库", to: "/recruitment/resumes", tone: "info" },
+                { icon: Users, label: "候选人台账", desc: "全量候选人状态管理", to: "/recruitment/candidates", tone: "success" },
               ].map((a) => (
                 <Link
                   key={a.label}
