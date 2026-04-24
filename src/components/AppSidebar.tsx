@@ -1,13 +1,13 @@
-import { Users, Clock, UserPlus, TrendingUp, GraduationCap } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Users, Clock, UserPlus, TrendingUp, GraduationCap, ChevronRight, type LucideIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { NavLink } from "@/components/NavLink";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -16,7 +16,10 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
-const items = [
+type NavChild = { title: string; url: string };
+type NavItem = { title: string; url: string; icon: LucideIcon; children: NavChild[] };
+
+const items: NavItem[] = [
   {
     title: "员工档案助手",
     url: "/employee",
@@ -77,10 +80,34 @@ const items = [
   },
 ];
 
+const isPathInModule = (pathname: string, moduleUrl: string) =>
+  pathname === moduleUrl || pathname.startsWith(`${moduleUrl}/`);
+
 export function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
+  const navigate = useNavigate();
   const collapsed = state === "collapsed";
+
+  const activeModule = items.find((it) => isPathInModule(location.pathname, it.url))?.url ?? null;
+  const [openModule, setOpenModule] = useState<string | null>(activeModule ?? items[0].url);
+
+  // Auto expand the active module on route change
+  useEffect(() => {
+    if (activeModule) setOpenModule(activeModule);
+  }, [activeModule]);
+
+  const handleModuleClick = (e: React.MouseEvent, item: NavItem) => {
+    if (collapsed) return; // let NavLink navigate normally in collapsed mode
+    e.preventDefault();
+    // Toggle: if already open, collapse; otherwise open & navigate to module home
+    if (openModule === item.url && isPathInModule(location.pathname, item.url)) {
+      setOpenModule(null);
+    } else {
+      setOpenModule(item.url);
+      navigate(item.url);
+    }
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -98,40 +125,62 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-1">
               {items.map((item) => {
-                const isModuleActive =
-                  location.pathname === item.url || location.pathname.startsWith(`${item.url}/`) ||
-                  (item.url === "/attendance" && location.pathname.startsWith("/attendance"));
+                const isModuleActive = isPathInModule(location.pathname, item.url);
+                const isOpen = !collapsed && openModule === item.url;
 
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild tooltip={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.title}
+                      isActive={isModuleActive}
+                      className={cn(
+                        "group/module h-10 transition-colors",
+                        isModuleActive &&
+                          "bg-sidebar-accent text-sidebar-accent-foreground font-medium hover:bg-sidebar-accent",
+                      )}
+                    >
                       <NavLink
                         to={item.url}
-                        className="hover:bg-sidebar-accent"
-                        activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                        onClick={(e) => handleModuleClick(e, item)}
+                        className="flex items-center gap-2"
                       >
-                        <item.icon className="h-4 w-4" />
-                        {!collapsed && <span>{item.title}</span>}
+                        <item.icon className={cn("h-4 w-4 shrink-0", isModuleActive && "text-sidebar-accent-foreground")} />
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 truncate">{item.title}</span>
+                            <ChevronRight
+                              className={cn(
+                                "h-3.5 w-3.5 text-muted-foreground transition-transform duration-200",
+                                isOpen && "rotate-90",
+                              )}
+                            />
+                          </>
+                        )}
                       </NavLink>
                     </SidebarMenuButton>
-                    {!collapsed && isModuleActive && (
-                      <div className="mt-1 ml-6 border-l border-sidebar-border pl-3">
-                        <div className="space-y-1">
+
+                    {!collapsed && isOpen && (
+                      <div className="mt-1 ml-[18px] border-l border-sidebar-border pl-2">
+                        <ul className="space-y-0.5 py-0.5">
                           {item.children.map((child) => (
-                            <NavLink
-                              key={child.url}
-                              to={child.url}
-                              className={cn(
-                                "flex min-h-8 items-center rounded-md px-2 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                              )}
-                              activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                            >
-                              <span>{child.title}</span>
-                            </NavLink>
+                            <li key={child.url}>
+                              <NavLink
+                                to={child.url}
+                                end
+                                className={cn(
+                                  "flex min-h-8 items-center rounded-md px-2.5 text-[13px] text-sidebar-foreground/75",
+                                  "hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground transition-colors",
+                                )}
+                                activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                              >
+                                <span className="truncate">{child.title}</span>
+                              </NavLink>
+                            </li>
                           ))}
-                        </div>
+                        </ul>
                       </div>
                     )}
                   </SidebarMenuItem>
