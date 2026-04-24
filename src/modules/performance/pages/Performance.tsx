@@ -19,12 +19,26 @@ const nodes = [
   { name: "总经理确认", state: "todo", who: "王总", date: "—" },
 ];
 
-const myTasks = [
-  { id: 1, name: "林峰 · 市场专员", node: "上级评分", due: "今日到期", overdue: false },
-  { id: 2, name: "潘伟 · 物业主管", node: "上级评分", due: "已逾期 1 天", overdue: true },
-  { id: 3, name: "袁帅 · 财务", node: "上级评分", due: "还剩 2 天", overdue: false },
-  { id: 4, name: "赵磊 · 品质管理部", node: "部门负责人", due: "还剩 3 天", overdue: false },
-  { id: 5, name: "邵华 · 生产主管", node: "上级评分", due: "已逾期 2 天", overdue: true },
+type TaskBucket = "overdue" | "today" | "soon" | "later";
+const myTasks: { id: number; name: string; node: string; due: string; overdue: boolean; bucket: TaskBucket }[] = [
+  { id: 1, name: "林峰 · 市场专员", node: "上级评分", due: "今日到期", overdue: false, bucket: "today" },
+  { id: 2, name: "潘伟 · 物业主管", node: "上级评分", due: "已逾期 1 天", overdue: true, bucket: "overdue" },
+  { id: 3, name: "袁帅 · 财务", node: "上级评分", due: "还剩 2 天", overdue: false, bucket: "soon" },
+  { id: 4, name: "赵磊 · 品质管理部", node: "部门负责人", due: "还剩 3 天", overdue: false, bucket: "soon" },
+  { id: 5, name: "邵华 · 生产主管", node: "上级评分", due: "已逾期 2 天", overdue: true, bucket: "overdue" },
+  { id: 6, name: "王芳 · 人事专员", node: "上级评分", due: "今日到期", overdue: false, bucket: "today" },
+  { id: 7, name: "李明 · 销售经理", node: "上级评分", due: "已逾期 3 天", overdue: true, bucket: "overdue" },
+  { id: 8, name: "周琳 · 客服主管", node: "上级评分", due: "还剩 1 天", overdue: false, bucket: "soon" },
+  { id: 9, name: "陈昊 · 仓储专员", node: "部门负责人", due: "还剩 5 天", overdue: false, bucket: "later" },
+  { id: 10, name: "吴敏 · 运营专员", node: "上级评分", due: "还剩 4 天", overdue: false, bucket: "soon" },
+  { id: 11, name: "孙磊 · 工艺工程师", node: "上级评分", due: "还剩 6 天", overdue: false, bucket: "later" },
+  { id: 12, name: "杨柳 · 品牌策划", node: "部门负责人", due: "还剩 7 天", overdue: false, bucket: "later" },
+  { id: 13, name: "高峰 · 区域经理", node: "上级评分", due: "已逾期 1 天", overdue: true, bucket: "overdue" },
+  { id: 14, name: "黄丽 · 招聘专员", node: "上级评分", due: "今日到期", overdue: false, bucket: "today" },
+  { id: 15, name: "徐涛 · 设备维护", node: "部门负责人", due: "还剩 8 天", overdue: false, bucket: "later" },
+  { id: 16, name: "马超 · 采购专员", node: "上级评分", due: "还剩 2 天", overdue: false, bucket: "soon" },
+  { id: 17, name: "朱丹 · 财务核算", node: "上级评分", due: "已逾期 2 天", overdue: true, bucket: "overdue" },
+  { id: 18, name: "胡军 · 安全主管", node: "部门负责人", due: "还剩 9 天", overdue: false, bucket: "later" },
 ];
 
 const indicators = [
