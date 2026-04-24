@@ -215,6 +215,48 @@ export default function Indicators() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={addOpen} onOpenChange={(o) => { setAddOpen(o); if (!o) setForm(emptyForm); }}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><Plus className="size-5 text-primary" />新增指标</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>指标名称 <span className="text-destructive">*</span></Label>
+                <Input placeholder="例如：客户回访及时率" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+              </div>
+              <div className="space-y-2">
+                <Label>适用岗位 <span className="text-destructive">*</span></Label>
+                <Input placeholder="例如：客服专员" value={form.position} onChange={(e) => setForm({ ...form, position: e.target.value })} />
+              </div>
+              <div className="space-y-2">
+                <Label>指标类型</Label>
+                <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v as "量化" | "定性" })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="量化">量化</SelectItem>
+                    <SelectItem value="定性">定性</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>权重（%）</Label>
+                <Input type="number" min={0} max={100} value={form.weight} onChange={(e) => setForm({ ...form, weight: Number(e.target.value) })} />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>评分规则</Label>
+              <Textarea rows={3} placeholder="例如：≥95% 满分；每低 5% 扣 10 分" value={form.rule} onChange={(e) => setForm({ ...form, rule: e.target.value })} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAddOpen(false)}>取消</Button>
+            <Button onClick={submitAdd}>确认新增</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
