@@ -37,6 +37,19 @@ const indicators = [
 export default function Performance() {
   const [scores, setScores] = useState<Record<number, number>>({});
   const [comment, setComment] = useState("");
+  const [activeTask, setActiveTask] = useState(myTasks[0]);
+  const [tab, setTab] = useState("leader");
+
+  const goScore = (t: typeof myTasks[number]) => {
+    setActiveTask(t);
+    setTab("leader");
+    setScores({});
+    setComment("");
+    toast.success(`已切换到 ${t.name} 的评分面板`);
+    setTimeout(() => {
+      document.getElementById("score-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
 
   const setScore = (idx: number, v: number) => {
     if (v < 0 || v > 100) {
