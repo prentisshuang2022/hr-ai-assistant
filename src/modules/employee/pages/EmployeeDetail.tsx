@@ -110,7 +110,7 @@ export default function EmployeeDetail() {
     return (
       <div className="p-12 text-center">
         <p className="text-muted-foreground">员工不存在</p>
-        <Link to="/employees" className="text-primary text-sm mt-3 inline-block">返回列表</Link>
+        <Link to="/employee/employees" className="text-primary text-sm mt-3 inline-block">返回列表</Link>
       </div>
     );
   }
@@ -163,7 +163,7 @@ export default function EmployeeDetail() {
 
   return (
     <div className="p-6 max-w-[1600px] mx-auto">
-      <Link to="/employees" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
+      <Link to="/employee/employees" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
         <ArrowLeft className="h-4 w-4" />返回员工档案
       </Link>
 
