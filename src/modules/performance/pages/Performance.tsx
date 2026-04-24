@@ -159,13 +159,13 @@ export default function Performance() {
         </Card>
 
         {/* 评分面板 */}
-        <Card className="col-span-2 shadow-none border">
-          <Tabs defaultValue="leader">
+        <Card id="score-panel" className="col-span-2 shadow-none border">
+          <Tabs value={tab} onValueChange={setTab}>
             <div className="px-6 pt-5 border-b">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <div className="text-base font-semibold">林峰 · 市场专员</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">EMP0000 · 入职 2019-08-22</div>
+                  <div className="text-base font-semibold">{activeTask.name}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">当前节点：{activeTask.node} · {activeTask.due}</div>
                 </div>
                 <div className="text-right">
                   <div className="text-xs text-muted-foreground">当前合计得分</div>
