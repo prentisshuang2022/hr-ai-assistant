@@ -323,7 +323,7 @@ export default function QuestionBank() {
             </Button>
             <div className="flex gap-2">
               <Button
-                onClick={() => navigate("/exam-center")}
+                onClick={() => navigate("/training/exam-center")}
                 className="bg-primary hover:bg-primary/90"
               >
                 前往发布考试<ArrowRight className="size-4 ml-1.5" />

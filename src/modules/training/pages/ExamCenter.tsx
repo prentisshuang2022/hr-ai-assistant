@@ -313,7 +313,7 @@ export default function ExamCenter() {
           <div className="mt-6 flex justify-between">
             <Button variant="outline" onClick={reset}>再发布一场</Button>
             <Button
-              onClick={() => navigate("/records")}
+              onClick={() => navigate("/training/records")}
               className="bg-primary hover:bg-primary/90"
             >
               归档至成绩留档<ArrowRight className="size-4 ml-1.5" />

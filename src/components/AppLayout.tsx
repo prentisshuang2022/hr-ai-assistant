@@ -20,7 +20,7 @@ interface AppLayoutProps {
 
 const ROUTE_LABELS: Record<string, string> = {
   "/": "系统首页",
-  "/employee": "员工档案助手",
+  "/employee": "流动看板",
   "/employee/employees": "员工档案",
   "/employee/employees/new": "新增员工",
   "/employee/alerts": "预警中心",
@@ -31,7 +31,7 @@ const ROUTE_LABELS: Record<string, string> = {
   "/attendance/overtime": "加班与调休",
   "/attendance/rules": "规则配置",
   "/recruitment": "招聘助手",
-  "/recruitment/jobs": "岗位与 JD",
+  "/recruitment/jobs": "岗位与JD",
   "/recruitment/jobs/new": "新建岗位",
   "/recruitment/resumes": "简历库",
   "/recruitment/candidates": "候选人台账",

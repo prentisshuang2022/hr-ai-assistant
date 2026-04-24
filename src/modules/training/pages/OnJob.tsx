@@ -482,7 +482,7 @@ export default function OnJob() {
           <div className="mt-6 flex justify-between">
             <Button variant="outline" onClick={reset}>新建培训计划</Button>
             <Button
-              onClick={() => navigate("/records")}
+              onClick={() => navigate("/training/records")}
               className="bg-primary hover:bg-primary/90"
             >
               查看员工档案<ArrowRight className="size-4 ml-1.5" />
