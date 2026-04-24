@@ -1,4 +1,4 @@
-import { Building2, Clock, GraduationCap, TrendingUp, UserPlus, Users } from "lucide-react";
+import { Building2, Clock, GraduationCap, TrendingUp, UserPlus, Users, BookOpen } from "lucide-react";
 import { HomeModulesGrid } from "@/components/navigation/HomeModulesGrid";
 
 const modules = [
@@ -67,6 +67,19 @@ const modules = [
     ],
     highlights: ["培训总览", "题库管理", "考试中心", "培训记录留存"],
   },
+  {
+    title: "人资知识库",
+    description: "沉淀政策、流程、FAQ 文档，提供全文检索与智能问答。",
+    icon: BookOpen,
+    to: "/knowledge",
+    stats: [
+      { label: "已收录文档", value: "6" },
+      { label: "高频问答", value: "6" },
+      { label: "本月提问", value: "1,286" },
+      { label: "解决率", value: "88%" },
+    ],
+    highlights: ["文档录入（富文本/Word/PDF）", "全文检索与标签筛选", "高频问题汇总", "智能问答助手"],
+  },
 ];
 
 const Index = () => {
@@ -86,7 +99,7 @@ const Index = () => {
           <div className="grid grid-cols-2 gap-3 rounded-2xl bg-white/10 p-4 backdrop-blur">
             <div>
               <div className="text-xs text-primary-foreground/70">一级模块</div>
-              <div className="mt-1 text-2xl font-semibold">5</div>
+              <div className="mt-1 text-2xl font-semibold">6</div>
             </div>
             <div>
               <div className="text-xs text-primary-foreground/70">统一路由</div>
