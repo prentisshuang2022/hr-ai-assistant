@@ -91,7 +91,7 @@ export default function NewEmployee() {
 
   return (
     <div className="p-6 space-y-4 max-w-[1400px] mx-auto">
-      <Link to="/employees" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <Link to="/employee/employees" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" />返回员工档案
       </Link>
 
