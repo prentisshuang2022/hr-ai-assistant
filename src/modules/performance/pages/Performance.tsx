@@ -7,8 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { StatusBadge } from "@/modules/performance/components/common/StatusBadge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Sparkles, BellRing, ShieldCheck, ArrowRight, CheckCircle2, AlertTriangle, Clock } from "lucide-react";
+import { Sparkles, BellRing, ShieldCheck, ArrowRight, CheckCircle2, AlertTriangle, Clock, Search, ListChecks } from "lucide-react";
 import { toast } from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const nodes = [
   { name: "员工自评", state: "done", who: "本人", date: "04-08" },
