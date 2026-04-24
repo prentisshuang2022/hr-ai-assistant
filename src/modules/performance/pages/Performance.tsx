@@ -174,41 +174,114 @@ export default function Performance() {
 
       <div className="grid grid-cols-3 gap-6">
         {/* 待办列表 */}
-        <Card className="col-span-1 shadow-none border overflow-hidden h-fit">
-          <div className="p-5 border-b">
+        <Card className="col-span-1 shadow-none border overflow-hidden h-fit flex flex-col">
+          <div className="p-4 border-b space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold">我的待办评分</h3>
-              <StatusBadge tone="warning">{myTasks.filter(t=>t.overdue).length} 项逾期</StatusBadge>
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold">我的待办评分</h3>
+                <span className="text-xs text-muted-foreground">共 {counts.all} 项</span>
+              </div>
+              <StatusBadge tone="warning">{counts.overdue} 项逾期</StatusBadge>
+            </div>
+
+            <div className="relative">
+              <Search className="size-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="搜索员工 / 岗位"
+                value={taskQuery}
+                onChange={(e) => setTaskQuery(e.target.value)}
+                className="pl-8 h-9"
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-1.5">
+              {([
+                ["all", "全部", counts.all],
+                ["overdue", "逾期", counts.overdue],
+                ["today", "今日", counts.today],
+                ["soon", "即将", counts.soon],
+                ["later", "未来", counts.later],
+              ] as const).map(([key, label, n]) => (
+                <button
+                  key={key}
+                  onClick={() => setTaskFilter(key as "all" | TaskBucket)}
+                  className={`px-2.5 h-7 rounded-full text-xs border transition-colors ${
+                    taskFilter === key
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : key === "overdue" && n > 0
+                      ? "border-warning/40 text-warning hover:bg-warning-soft/40"
+                      : "border-border text-muted-foreground hover:bg-secondary"
+                  }`}
+                >
+                  {label} <span className="opacity-70">{n}</span>
+                </button>
+              ))}
             </div>
           </div>
-          <div className="divide-y">
-            {myTasks.map((t) => (
-              <div
-                key={t.id}
-                className={`p-4 transition-colors ${activeTask.id === t.id ? "bg-primary-soft/40" : "hover:bg-secondary/40"}`}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <div className="font-medium text-sm">{t.name}</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">{t.node}</div>
+
+          {/* 批量操作栏 */}
+          <div className="px-4 py-2 border-b bg-secondary/30 flex items-center justify-between text-xs">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <Checkbox
+                checked={allVisibleSelected}
+                onCheckedChange={toggleAllVisible}
+              />
+              <span className="text-muted-foreground">
+                {selected.size > 0 ? `已选 ${selected.size} 项` : "全选当前"}
+              </span>
+            </label>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-7 px-2 text-xs gap-1 disabled:opacity-40"
+              disabled={!selected.size}
+              onClick={bulkRemind}
+            >
+              <ListChecks className="size-3.5" />批量催办
+            </Button>
+          </div>
+
+          <div className="divide-y max-h-[520px] overflow-y-auto">
+            {filteredTasks.length === 0 ? (
+              <div className="p-8 text-center text-sm text-muted-foreground">没有符合条件的待办</div>
+            ) : (
+              filteredTasks.map((t) => (
+                <div
+                  key={t.id}
+                  className={`p-3 pl-4 transition-colors ${activeTask.id === t.id ? "bg-primary-soft/40" : "hover:bg-secondary/40"}`}
+                >
+                  <div className="flex items-start gap-2.5">
+                    <Checkbox
+                      checked={selected.has(t.id)}
+                      onCheckedChange={() => toggleOne(t.id)}
+                      className="mt-0.5"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <div className="font-medium text-sm truncate">{t.name}</div>
+                          <div className="text-xs text-muted-foreground mt-0.5">{t.node}</div>
+                        </div>
+                        {t.overdue && <AlertTriangle className="size-4 text-warning shrink-0" />}
+                      </div>
+                      <div className="flex items-center justify-between mt-2">
+                        <span className={`text-xs ${t.overdue ? "text-destructive" : "text-muted-foreground"}`}>{t.due}</span>
+                        <div className="flex gap-1">
+                          {t.overdue && (
+                            <Button size="sm" variant="ghost" className="h-7 px-2 text-xs" onClick={() => remind(t.name)}>
+                              催办
+                            </Button>
+                          )}
+                          <Button size="sm" variant="ghost" className="h-7 px-2 text-xs gap-1 text-primary hover:text-primary" onClick={() => goScore(t)}>
+                            去评分 <ArrowRight className="size-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  {t.overdue && <AlertTriangle className="size-4 text-warning shrink-0" />}
                 </div>
-                <div className="flex items-center justify-between mt-3">
-                  <span className={`text-xs ${t.overdue ? "text-destructive" : "text-muted-foreground"}`}>{t.due}</span>
-                  <div className="flex gap-1">
-                    {t.overdue && (
-                      <Button size="sm" variant="ghost" className="h-7 px-2 text-xs" onClick={() => remind(t.name)}>
-                        催办
-                      </Button>
-                    )}
-                    <Button size="sm" variant="ghost" className="h-7 px-2 text-xs gap-1 text-primary hover:text-primary" onClick={() => goScore(t)}>
-                      去评分 <ArrowRight className="size-3" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </Card>
 
