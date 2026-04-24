@@ -33,7 +33,6 @@ import QuestionBank from "@/modules/training/pages/QuestionBank";
 import ExamCenter from "@/modules/training/pages/ExamCenter";
 import OnJob from "@/modules/training/pages/OnJob";
 import TrainingRecords from "@/modules/training/pages/Records";
-import KnowledgeHome from "@/modules/knowledge/pages/KnowledgeHome";
 import DocUpload from "@/modules/knowledge/pages/DocUpload";
 import FullTextSearch from "@/modules/knowledge/pages/FullTextSearch";
 import SmartQA from "@/modules/knowledge/pages/SmartQA";
@@ -83,7 +82,7 @@ const App = () => (
             <Route path="/training/on-job" element={<OnJob />} />
             <Route path="/training/records" element={<TrainingRecords />} />
 
-            <Route path="/knowledge" element={<KnowledgeHome />} />
+            <Route path="/knowledge" element={<Navigate to="/knowledge/upload" replace />} />
             <Route path="/knowledge/upload" element={<DocUpload />} />
             <Route path="/knowledge/search" element={<FullTextSearch />} />
             <Route path="/knowledge/qa" element={<SmartQA />} />
