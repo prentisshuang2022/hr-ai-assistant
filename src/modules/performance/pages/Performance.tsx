@@ -129,7 +129,10 @@ export default function Performance() {
           </div>
           <div className="divide-y">
             {myTasks.map((t) => (
-              <div key={t.id} className="p-4 hover:bg-secondary/40 transition-colors">
+              <div
+                key={t.id}
+                className={`p-4 transition-colors ${activeTask.id === t.id ? "bg-primary-soft/40" : "hover:bg-secondary/40"}`}
+              >
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <div className="font-medium text-sm">{t.name}</div>
@@ -145,7 +148,7 @@ export default function Performance() {
                         催办
                       </Button>
                     )}
-                    <Button size="sm" variant="ghost" className="h-7 px-2 text-xs gap-1">
+                    <Button size="sm" variant="ghost" className="h-7 px-2 text-xs gap-1 text-primary hover:text-primary" onClick={() => goScore(t)}>
                       去评分 <ArrowRight className="size-3" />
                     </Button>
                   </div>
