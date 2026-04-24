@@ -24,6 +24,11 @@ export default function OvertimeLeave() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
 
+  // 调休明细筛选
+  const [doDeptFilter, setDoDeptFilter] = useState("all");
+  const [doBalanceFilter, setDoBalanceFilter] = useState("all");
+  const [doSearch, setDoSearch] = useState("");
+
   const handleRowClick = (id: string) => {
     setSelectedDetail(id);
     setDetailOpen(true);
@@ -33,6 +38,20 @@ export default function OvertimeLeave() {
     if (campusFilter !== "all" && r.group !== campusFilter) return false;
     if (posFilter === "production" && !["生产岗", "质检岗"].includes(r.position)) return false;
     if (posFilter === "non-production" && ["生产岗", "质检岗"].includes(r.position)) return false;
+    return true;
+  });
+
+  const dayoffDepts = useMemo(
+    () => Array.from(new Set(dayoffRows.map((r) => r.dept))),
+    [],
+  );
+
+  const filteredDayoff = dayoffRows.filter((r) => {
+    if (doDeptFilter !== "all" && r.dept !== doDeptFilter) return false;
+    if (doBalanceFilter === "has" && r.remainHours <= 0) return false;
+    if (doBalanceFilter === "none" && r.remainHours > 0) return false;
+    if (doBalanceFilter === "low" && !(r.remainHours > 0 && r.remainHours < 8)) return false;
+    if (doSearch.trim() && !r.name.toLowerCase().includes(doSearch.trim().toLowerCase())) return false;
     return true;
   });
 
